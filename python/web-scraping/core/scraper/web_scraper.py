@@ -8,12 +8,13 @@ class WebScraper:
 
     BASE_URL = "https://nos.nl/"
     ARCHIEF_URL = BASE_URL + "nieuws/archief/"
-    DB_COLUMN_NAMES = ["date", "headline", "link", "text"]
+
+    DB_TABLE_NAME = "nos"
+    DB_TABLE_COLUMN_NAMES = ["date", "headline", "link", "text"]
 
     def __init__(self):
         self.html_content = None
         self.soup = None
-        self.connection = DBConnection
 
     def _get_response(self, date):
         response = requests.get(self.ARCHIEF_URL)
@@ -32,9 +33,13 @@ class WebScraper:
             link = article.find('a')['href']
             date = article.find('time')['datetime']
             text = ""
-
-
+            with DBConnection() as dbc:
+                dbc.write(table_name=self.DB_TABLE_NAME,
+                          table_cols=self.DB_TABLE_COLUMN_NAMES,
+                          data=(date, headline, link, text))
+            return
 
 
 if __name__ == '__main__':
     scraper = WebScraper()
+    scraper.get_articles()
