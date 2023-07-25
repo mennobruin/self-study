@@ -1,15 +1,19 @@
 from bs4 import BeautifulSoup
 import requests
 
+from core.database.db_connection import DBConnection
+
 
 class WebScraper:
 
     BASE_URL = "https://nos.nl/"
     ARCHIEF_URL = BASE_URL + "nieuws/archief/"
+    DB_COLUMN_NAMES = ["date", "headline", "link", "text"]
 
     def __init__(self):
         self.html_content = None
         self.soup = None
+        self.connection = DBConnection
 
     def _get_response(self, date):
         response = requests.get(self.ARCHIEF_URL)
@@ -27,6 +31,9 @@ class WebScraper:
             headline = article.find('div', class_='list-time__title link-hover').text
             link = article.find('a')['href']
             date = article.find('time')['datetime']
+            text = ""
+
+
 
 
 if __name__ == '__main__':
