@@ -3,7 +3,7 @@ import sqlite3
 
 class DBConnection:
 
-    DB_NAME = '..\\..\\resources\\data\\scrape_data.db'
+    DB_NAME = 'C:\\Users\\MennoBruin\\self-study-parent\\self-study\\python\\web-scraping\\resources\\data\\scrape_data.db'
     INSERT_QUERY = 'INSERT INTO {0} ({1}) VALUES ({2})'
 
     def __init__(self):
@@ -29,12 +29,11 @@ class DBConnection:
 
         query = self.INSERT_QUERY.format(table_name, cols[:-1], values[:-1])
         self.cursor.execute(f'CREATE TABLE IF NOT EXISTS {table_name} ('
-                            f'id INT NOT NULL, '
                             f'date TEXT NOT NULL, '
-                            f'headline TEXT NOT NULL, '
                             f'link TEXT NOT NULL, '
+                            f'headline TEXT NOT NULL, '
                             f'text TEXT, '
-                            f'PRIMARY KEY (id))')
+                            f'PRIMARY KEY (link))')
         self.cursor.executemany(query, (data,))
 
 
