@@ -44,12 +44,12 @@ class WebScraper:
                               table_cols=self.DB_TABLE_COLUMN_NAMES,
                               data=(date, link, headline, text))
                 except sqlite3.IntegrityError as e:
-                    print(e)
+                    print(e, ':' + link)
                     continue
 
     def _get_text(self, url):
         html = str(self._get_response(url))
-        article_body_matches = re.findall(r'"articleBody"\s*:\s*"(.*?)"', html)
+        article_body_matches = re.findall(r'"articleBody"\s*:\s*"(.*?(?<!\\))"', html)
         return article_body_matches[0] if article_body_matches else None
 
 
